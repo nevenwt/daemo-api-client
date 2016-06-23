@@ -28,7 +28,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
 
 
-class MyServerProtocol(WebSocketServerProtocol):
+class DaemoServerProtocol(WebSocketServerProtocol):
 
     def onConnect(self, request):
         print("Client connecting: {0}".format(request.peer))
@@ -42,7 +42,6 @@ class MyServerProtocol(WebSocketServerProtocol):
         else:
             print("Text message received: {0}".format(payload.decode('utf8')))
 
-        # echo back message verbatim
         self.sendMessage(payload, isBinary)
 
     def onClose(self, wasClean, code, reason):
@@ -59,7 +58,7 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     factory = WebSocketServerFactory(u"ws://127.0.0.1:9000")
-    factory.protocol = MyServerProtocol
+    factory.protocol = DaemoServerProtocol
     # factory.setProtocolOptions(maxConnections=2)
 
     reactor.listenTCP(9000, factory)
