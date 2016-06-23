@@ -29,7 +29,9 @@ class DaemoClientProtocol(WebSocketClientProtocol):
                             self.factory.completion(data)
                     else:
                         #Some message to server saying the task was not accepted
-                        self.sendMessage(u'{"project_id":1234, "data": "{"accept": False}"}')
+                        response['accept'] = False
+                        self.sendMessage(json.dumps(response, ensure_ascii=False).encode('utf8'))
+                        print "task was rejected..."
 
     def onClose(self, wasClean, code, reason):
         print "WebSocket connection closed: {0}".format(reason)
@@ -96,7 +98,8 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     def accept(x):
-        return True
+        import random
+        return random.randint(0, 1)
     
     def completion(x):
         print "we have completed this task"
